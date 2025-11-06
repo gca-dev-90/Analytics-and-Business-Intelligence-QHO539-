@@ -1,4 +1,5 @@
-
+# Analytics-and-Business-Intelligence-QHO539-
+Year 2 Study PLR
 # Weekly Learning (Weeks 1–10)
 
 Run your Week 1–10 Python code from one place with a clean GUI (Streamlit).
@@ -62,5 +63,4 @@ weekly_learning_vscode/
    └─ week10.py
 ```
 
-# Analytics-and-Business-Intelligence-QHO539-
-Year 2 Study PLR
+
