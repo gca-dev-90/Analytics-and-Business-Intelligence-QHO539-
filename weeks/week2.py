@@ -223,7 +223,6 @@ def statistical_summary(stats_ctx: StatsContext, verbose: bool = True) -> None:
 
 def create_dashboard_figure(df: pd.DataFrame) -> Figure:
     fig, axes = plt.subplots(2, 2, figsize=(14, 10))
-    fig.suptitle("Week 2: Descriptive Statistics - GDHI Analysis 2016", fontsize=16, fontweight="bold")
 
     gdhi_2016 = df["2016"]
     mean_2016 = float(np.mean(gdhi_2016))

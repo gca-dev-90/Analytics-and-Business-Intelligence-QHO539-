@@ -130,6 +130,25 @@ class Sidebar(QtWidgets.QWidget):
 
         outer = QtWidgets.QVBoxLayout(self)
 
+        # Profile picture/logo
+        logo_path = PROJECT_ROOT / "assets" / "profile.png"
+        if logo_path.exists():
+            logo_label = QtWidgets.QLabel()
+            pixmap = QtGui.QPixmap(str(logo_path))
+            # Scale to 120x120 pixels maintaining aspect ratio with smooth transformation
+            scaled_pixmap = pixmap.scaled(120, 120, QtCore.Qt.AspectRatioMode.KeepAspectRatio,
+                                         QtCore.Qt.TransformationMode.SmoothTransformation)
+            logo_label.setPixmap(scaled_pixmap)
+            logo_label.setAlignment(ALIGN_CENTER)
+            logo_label.setStyleSheet("padding: 15px;")
+            outer.addWidget(logo_label)
+
+            # Creator name under profile picture
+            creator_label = QtWidgets.QLabel("Created by George C Angheluta")
+            creator_label.setAlignment(ALIGN_CENTER)
+            creator_label.setStyleSheet("color: #888888; font-size: 10px; padding-bottom: 10px;")
+            outer.addWidget(creator_label)
+
         # Title with styling
         title = QtWidgets.QLabel("📊 Weekly Learning")
         font = title.font()

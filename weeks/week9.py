@@ -333,8 +333,6 @@ def create_summary_dashboard(df: pd.DataFrame, verbose: bool = True) -> Figure:
     ax6.legend(fontsize=9)
     ax6.grid(axis='y', alpha=0.3)
 
-    plt.suptitle('GDHI Performance Summary Dashboard', fontsize=16, fontweight='bold', y=0.995)
-
     if verbose:
         fig.savefig(OUTPUT_DIR / "week9_summary_dashboard.png", dpi=300, bbox_inches='tight')
         print("[OK] Saved: week9_summary_dashboard.png")

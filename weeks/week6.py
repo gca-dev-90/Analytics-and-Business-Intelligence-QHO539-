@@ -150,7 +150,6 @@ def multivariate_analysis(df: pd.DataFrame, features: list[str], verbose: bool =
 
     scatter_matrix(df[features], figsize=(12, 12), diagonal="kde", alpha=0.7)
     fig_sm = plt.gcf()
-    fig_sm.suptitle("Multivariate Scatter Matrix", fontsize=14, fontweight="bold", y=1.02)
     fig_sm.tight_layout()
     fig_sm.savefig(OUTPUT_DIR / "week6_scatter_matrix.png", dpi=300, bbox_inches="tight")
     figs.append(fig_sm)

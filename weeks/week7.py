@@ -124,7 +124,6 @@ def _compute_statistics(df: pd.DataFrame, verbose: bool) -> StatsContext:
 def _figure_univariate(df: pd.DataFrame, stats_ctx: StatsContext) -> Figure:
     year_2016: pd.Series = stats_ctx["year_2016"]
     fig, axes = plt.subplots(2, 2, figsize=(15, 10))
-    fig.suptitle("Univariate Analysis: GDHI Distribution in 2016", fontsize=16, fontweight="bold")
 
     axes[0, 0].hist(year_2016, bins=30, color="skyblue", edgecolor="black", alpha=0.7)
     axes[0, 0].axvline(year_2016.mean(), color="red", linestyle="--", linewidth=2, label=f"Mean: GBP {year_2016.mean():.0f}")
@@ -216,7 +215,6 @@ def _figure_correlation(df: pd.DataFrame) -> Tuple[Figure, Dict[str, float]]:
 
 def _figure_scatter(df: pd.DataFrame) -> Tuple[Figure, Dict[str, float]]:
     fig, axes = plt.subplots(1, 3, figsize=(18, 5))
-    fig.suptitle("Multivariate Analysis: Scatter Plots", fontsize=16, fontweight="bold")
 
     plots = [
         ("1997", "2016", "1997 vs 2016"),
@@ -291,7 +289,6 @@ def _simple_linear_regression(df: pd.DataFrame) -> Tuple[LinearRegression, np.nd
 def _residual_figure(y_true: np.ndarray, y_pred: np.ndarray) -> Tuple[np.ndarray, Figure]:
     residuals = y_true - y_pred
     fig, axes = plt.subplots(1, 2, figsize=(15, 5))
-    fig.suptitle("Residual Analysis", fontsize=16, fontweight="bold")
 
     axes[0].scatter(y_pred, residuals, alpha=0.6, s=50, color="purple", edgecolors="black", linewidth=0.5)
     axes[0].axhline(y=0, color="red", linestyle="--", linewidth=2)
