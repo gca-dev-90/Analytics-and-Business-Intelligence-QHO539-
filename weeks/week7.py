@@ -1,5 +1,3 @@
-"""Week 7 - Univariate and multivariate analysis for the GDHI dataset."""
-
 from __future__ import annotations
 
 from pathlib import Path

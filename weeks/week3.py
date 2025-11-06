@@ -1,5 +1,3 @@
-"""Week 3 - Descriptive statistics and visualisation for the GDHI dataset."""
-
 from __future__ import annotations
 
 import contextlib

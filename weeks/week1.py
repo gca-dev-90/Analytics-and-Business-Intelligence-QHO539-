@@ -1,5 +1,3 @@
-"""Week 1 - GDHI analysis helpers for the Qt desktop app."""
-
 from __future__ import annotations
 
 import contextlib

@@ -1,5 +1,3 @@
-"""Week 6 - Machine learning analysis with the GDHI dataset."""
-
 from __future__ import annotations
 
 import contextlib

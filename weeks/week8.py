@@ -1,5 +1,3 @@
-"""Week 8 - GDHI data preparation for Tableau dashboards."""
-
 from __future__ import annotations
 
 from pathlib import Path

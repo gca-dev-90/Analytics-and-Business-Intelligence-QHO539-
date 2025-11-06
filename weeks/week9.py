@@ -1,5 +1,3 @@
-"""Week 9 - Tableau-equivalent visualizations for GDHI data analysis."""
-
 from __future__ import annotations
 
 import contextlib
