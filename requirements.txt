@@ -1,0 +1,19 @@
+# Core Streamlit + UI
+streamlit>=1.37
+streamlit-option-menu>=0.3.12
+streamlit-extras>=0.4.0
+streamlit-aggrid>=0.3.4.post3
+streamlit-lottie>=0.0.3
+dash>=2.17
+dash-bootstrap-components>=1.6
+pandas>=2.2
+numpy>=1.26
+scikit-learn>=1.4
+statsmodels>=0.14
+plotly>=5.22
+seaborn>=0.13
+matplotlib>=3.8
+prophet>=1.1         
+openpyxl>=3.1        
+PyQt6>=6.6
+qdarkstyle>=3.2
