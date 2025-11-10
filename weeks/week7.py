@@ -204,9 +204,9 @@ def _figure_correlation(df: pd.DataFrame) -> Tuple[Figure, Dict[str, float]]:
     plt.tight_layout()
 
     corr_values = {
-        "1997_2016": float(corr_matrix.loc["1997", "2016"]),
-        "2000_2010": float(corr_matrix.loc["2000", "2010"]),
-        "2010_2016": float(corr_matrix.loc["2010", "2016"]),
+        "1997_2016": float(corr_matrix.loc["1997", "2016"]),  # type: ignore[arg-type]
+        "2000_2010": float(corr_matrix.loc["2000", "2010"]),  # type: ignore[arg-type]
+        "2010_2016": float(corr_matrix.loc["2010", "2016"]),  # type: ignore[arg-type]
     }
     return fig, corr_values
 
