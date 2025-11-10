@@ -33,7 +33,7 @@ def load_data(path: str | None, verbose: bool = True) -> tuple[pd.DataFrame, str
     df = load_csv(actual_path).copy()
     if verbose:
         print("Loading data...")
-        print(f"✓ Loaded {len(df)} regions with data from 1997-2016")
+        print(f"Loaded {len(df)} regions with data from 1997-2016")
     return df, actual_path
 
 
@@ -56,10 +56,12 @@ def create_tableau_ready_data(
     df_tableau["Year"] = df_tableau["Year"].astype(int)
     df_tableau = df_tableau.sort_values(["AREANM", "Year"])
 
+    # Always save to CSV
+    output_file = target_dir / "gdhi_tableau_format.csv"
+    df_tableau.to_csv(output_file, index=False)
+
     if verbose:
-        output_file = target_dir / "gdhi_tableau_format.csv"
-        df_tableau.to_csv(output_file, index=False)
-        print(f"✓ Tableau-ready data saved to: {output_file}")
+        print(f"Tableau-ready data saved to: {output_file}")
 
     return df_tableau
 
@@ -93,10 +95,12 @@ def calculate_metrics(
         labels=["Slow", "Moderate", "Fast", "Very Fast"],
     )
 
+    # Always save to CSV
+    output_file = target_dir / "gdhi_with_metrics.csv"
+    df_analysis.to_csv(output_file, index=False)
+
     if verbose:
-        output_file = target_dir / "gdhi_with_metrics.csv"
-        df_analysis.to_csv(output_file, index=False)
-        print(f"✓ Analysis file with metrics saved to: {output_file}")
+        print(f"Analysis file with metrics saved to: {output_file}")
 
     return df_analysis
 
@@ -114,18 +118,18 @@ def generate_summary_statistics(df: pd.DataFrame, df_analysis: pd.DataFrame) -> 
     print(f"Time Period: 1997-2016 ({len(year_cols)} years)")
 
     print("\n--- 1997 Statistics ---")
-    print(f"Mean GDHI: £{df['1997'].mean():,.0f}")
-    print(f"Median GDHI: £{df['1997'].median():,.0f}")
-    print(f"Min GDHI: £{df['1997'].min():,.0f} ({df.loc[df['1997'].idxmin(), 'AREANM']})")
-    print(f"Max GDHI: £{df['1997'].max():,.0f} ({df.loc[df['1997'].idxmax(), 'AREANM']})")
-    print(f"Std Dev: £{df['1997'].std():,.0f}")
+    print(f"Mean GDHI: GBP{df['1997'].mean():,.0f}")
+    print(f"Median GDHI: GBP{df['1997'].median():,.0f}")
+    print(f"Min GDHI: GBP{df['1997'].min():,.0f} ({df.loc[df['1997'].idxmin(), 'AREANM']})")
+    print(f"Max GDHI: GBP{df['1997'].max():,.0f} ({df.loc[df['1997'].idxmax(), 'AREANM']})")
+    print(f"Std Dev: GBP{df['1997'].std():,.0f}")
 
     print("\n--- 2016 Statistics ---")
-    print(f"Mean GDHI: £{df['2016'].mean():,.0f}")
-    print(f"Median GDHI: £{df['2016'].median():,.0f}")
-    print(f"Min GDHI: £{df['2016'].min():,.0f} ({df.loc[df['2016'].idxmin(), 'AREANM']})")
-    print(f"Max GDHI: £{df['2016'].max():,.0f} ({df.loc[df['2016'].idxmax(), 'AREANM']})")
-    print(f"Std Dev: £{df['2016'].std():,.0f}")
+    print(f"Mean GDHI: GBP{df['2016'].mean():,.0f}")
+    print(f"Median GDHI: GBP{df['2016'].median():,.0f}")
+    print(f"Min GDHI: GBP{df['2016'].min():,.0f} ({df.loc[df['2016'].idxmin(), 'AREANM']})")
+    print(f"Max GDHI: GBP{df['2016'].max():,.0f} ({df.loc[df['2016'].idxmax(), 'AREANM']})")
+    print(f"Std Dev: GBP{df['2016'].std():,.0f}")
 
     print("\n--- Growth Statistics (1997-2016) ---")
     print(f"Average Growth: {df_analysis['Percentage_Growth'].mean():.1f}%")
@@ -142,11 +146,11 @@ def generate_summary_statistics(df: pd.DataFrame, df_analysis: pd.DataFrame) -> 
     )
 
     print("\n--- Inequality Metrics ---")
-    print(f"1997 Income Gap: £{df['1997'].max() - df['1997'].min():,.0f}")
-    print(f"2016 Income Gap: £{df['2016'].max() - df['2016'].min():,.0f}")
+    print(f"1997 Income Gap: GBP{df['1997'].max() - df['1997'].min():,.0f}")
+    print(f"2016 Income Gap: GBP{df['2016'].max() - df['2016'].min():,.0f}")
     print(
         "Inequality Change: "
-        f"£{(df['2016'].max() - df['2016'].min()) - (df['1997'].max() - df['1997'].min()):,.0f}"
+        f"GBP{(df['2016'].max() - df['2016'].min()) - (df['1997'].max() - df['1997'].min()):,.0f}"
     )
 
     print("\n--- Income Distribution (2016) ---")
@@ -166,22 +170,22 @@ def identify_interesting_regions(df_analysis: pd.DataFrame) -> None:
     print("\n1. HIGHEST INCOME REGIONS (2016):")
     top_income = df_analysis.nlargest(5, "GDHI_2016")[["AREANM", "GDHI_2016", "Percentage_Growth"]]
     for _, row in top_income.iterrows():
-        print(f"   • {row['AREANM']}: £{row['GDHI_2016']:,.0f} ({row['Percentage_Growth']:.1f}% growth)")
+        print(f"   - {row['AREANM']}: GBP{row['GDHI_2016']:,.0f} ({row['Percentage_Growth']:.1f}% growth)")
 
     print("\n2. FASTEST GROWING REGIONS:")
     fastest = df_analysis.nlargest(5, "Percentage_Growth")[["AREANM", "GDHI_1997", "GDHI_2016", "Percentage_Growth"]]
     for _, row in fastest.iterrows():
-        print(f"   • {row['AREANM']}: {row['Percentage_Growth']:.1f}% (£{row['GDHI_1997']:,.0f} → £{row['GDHI_2016']:,.0f})")
+        print(f"   - {row['AREANM']}: {row['Percentage_Growth']:.1f}% (GBP{row['GDHI_1997']:,.0f} -> GBP{row['GDHI_2016']:,.0f})")
 
     print("\n3. SLOWEST GROWING REGIONS:")
     slowest = df_analysis.nsmallest(5, "Percentage_Growth")[["AREANM", "GDHI_1997", "GDHI_2016", "Percentage_Growth"]]
     for _, row in slowest.iterrows():
-        print(f"   • {row['AREANM']}: {row['Percentage_Growth']:.1f}% (£{row['GDHI_1997']:,.0f} → £{row['GDHI_2016']:,.0f})")
+        print(f"   - {row['AREANM']}: {row['Percentage_Growth']:.1f}% (GBP{row['GDHI_1997']:,.0f} -> GBP{row['GDHI_2016']:,.0f})")
 
     print("\n4. REGIONS WITH HIGHEST VOLATILITY:")
     volatile = df_analysis.nlargest(5, "Volatility")[["AREANM", "Volatility", "Average_GDHI"]]
     for _, row in volatile.iterrows():
-        print(f"   • {row['AREANM']}: Std Dev £{row['Volatility']:,.0f} (Avg: £{row['Average_GDHI']:,.0f})")
+        print(f"   - {row['AREANM']}: Std Dev GBP{row['Volatility']:,.0f} (Avg: GBP{row['Average_GDHI']:,.0f})")
 
 
 def create_comparison_groups(
@@ -239,10 +243,12 @@ def create_comparison_groups(
     df_groups = df.copy()
     df_groups["Region_Group"] = df_groups["AREANM"].apply(classify_region)
 
+    # Always save to CSV
+    output_file = target_dir / "gdhi_with_regions.csv"
+    df_groups.to_csv(output_file, index=False)
+
     if verbose:
-        output_file = target_dir / "gdhi_with_regions.csv"
-        df_groups.to_csv(output_file, index=False)
-        print(f"✓ Regional groupings saved to: {output_file}")
+        print(f"Regional groupings saved to: {output_file}")
         print("\n--- Regional Distribution ---")
         print(df_groups["Region_Group"].value_counts())
 
@@ -257,7 +263,7 @@ def create_dashboard_figure(df: pd.DataFrame, df_analysis: pd.DataFrame) -> Figu
 
     ax_dist.hist(df["2016"], bins=25, color="#4472C4", edgecolor="black", alpha=0.7)
     ax_dist.set_title("GDHI Distribution (2016)", fontweight="bold")
-    ax_dist.set_xlabel("GDHI (£)", fontweight="bold")
+    ax_dist.set_xlabel("GDHI (GBP)", fontweight="bold")
     ax_dist.set_ylabel("Number of areas", fontweight="bold")
     ax_dist.grid(True, alpha=0.3)
 
@@ -280,7 +286,7 @@ def create_dashboard_figure(df: pd.DataFrame, df_analysis: pd.DataFrame) -> Figu
     ax_trend.plot(year_cols, uk_avg, marker="o", linewidth=2, color="#E15759")
     ax_trend.set_title("UK Average GDHI Over Time", fontweight="bold")
     ax_trend.set_xlabel("Year", fontweight="bold")
-    ax_trend.set_ylabel("Average GDHI (£)", fontweight="bold")
+    ax_trend.set_ylabel("Average GDHI (GBP)", fontweight="bold")
     ax_trend.tick_params(axis="x", rotation=45)
     ax_trend.grid(True, alpha=0.3)
 

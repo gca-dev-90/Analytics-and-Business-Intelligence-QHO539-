@@ -465,19 +465,22 @@ def _prepare_outputs(df: pd.DataFrame, verbose: bool = False) -> Tuple[List[Tupl
         ("Regional Comparison", fig_regions),
     ]
 
+    # Always save figures to outputs directory
+    save_map = {
+        "week7_univariate_analysis.png": fig_uni,
+        "week7_time_series.png": fig_ts,
+        "week7_correlation_matrix.png": fig_corr,
+        "week7_scatter_plots.png": fig_scatter,
+        "week7_linear_regression.png": fig_lr,
+        "week7_residual_analysis.png": fig_residual,
+        "week7_multiple_regression.png": fig_multi,
+        "week7_regional_comparison.png": fig_regions,
+    }
+    for filename, figure in save_map.items():
+        figure.savefig(OUTPUT_DIR / filename, dpi=300, bbox_inches="tight")
+
     if verbose:
-        save_map = {
-            "week7_univariate_analysis.png": fig_uni,
-            "week7_time_series.png": fig_ts,
-            "week7_correlation_matrix.png": fig_corr,
-            "week7_scatter_plots.png": fig_scatter,
-            "week7_linear_regression.png": fig_lr,
-            "week7_residual_analysis.png": fig_residual,
-            "week7_multiple_regression.png": fig_multi,
-            "week7_regional_comparison.png": fig_regions,
-        }
-        for filename, figure in save_map.items():
-            figure.savefig(OUTPUT_DIR / filename, dpi=300, bbox_inches="tight")
+        print(f"\nSaved 8 visualization files to {OUTPUT_DIR}/")
 
     return figures, summary_text
 

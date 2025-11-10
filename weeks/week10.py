@@ -11,7 +11,6 @@ from matplotlib.figure import Figure
 from utils.data_loader import default_csv_path, load_csv
 from utils.qt_mpl import MplWidget  # type: ignore
 
-# Match the original script's display preferences when used from the CLI.
 pd.set_option("display.max_columns", None)
 pd.set_option("display.width", 200)
 
@@ -54,7 +53,7 @@ def load_and_explore_data(path: str | None, verbose: bool = True) -> tuple[pd.Da
         print("-" * 80)
         missing = df.isnull().sum()
         if missing.sum() == 0:
-            print("✓ No missing values found")
+            print("OK No missing values found")
         else:
             print(missing[missing > 0])
 
@@ -75,10 +74,10 @@ def calculate_statistics(df: pd.DataFrame, verbose: bool = True) -> pd.Series:
 
         print("\n2. KEY METRICS")
         print("-" * 80)
-        print(f"UK Average Income (2016): £{df['2016'].mean():,.0f}")
-        print(f"Median Income (2016): £{df['2016'].median():,.0f}")
-        print(f"Income Range: £{df['2016'].max() - df['2016'].min():,.0f}")
-        print(f"Standard Deviation: £{df['2016'].std():,.0f}")
+        print(f"UK Average Income (2016): GBP{df['2016'].mean():,.0f}")
+        print(f"Median Income (2016): GBP{df['2016'].median():,.0f}")
+        print(f"Income Range: GBP{df['2016'].max() - df['2016'].min():,.0f}")
+        print(f"Standard Deviation: GBP{df['2016'].std():,.0f}")
         cv = (df["2016"].std() / df["2016"].mean()) * 100
         print(f"Coefficient of Variation: {cv:.2f}%")
 
@@ -87,37 +86,37 @@ def calculate_statistics(df: pd.DataFrame, verbose: bool = True) -> pd.Series:
         q1 = df["2016"].quantile(0.25)
         q2 = df["2016"].quantile(0.50)
         q3 = df["2016"].quantile(0.75)
-        print(f"Q1 (25th percentile): £{q1:,.0f}")
-        print(f"Q2 (50th percentile): £{q2:,.0f}")
-        print(f"Q3 (75th percentile): £{q3:,.0f}")
-        print(f"Interquartile Range: £{q3 - q1:,.0f}")
+        print(f"Q1 (25th percentile): GBP{q1:,.0f}")
+        print(f"Q2 (50th percentile): GBP{q2:,.0f}")
+        print(f"Q3 (75th percentile): GBP{q3:,.0f}")
+        print(f"Interquartile Range: GBP{q3 - q1:,.0f}")
 
         print("\n4. TOP 10 HIGHEST INCOME AREAS (2016)")
         print("-" * 80)
         top_10 = df.nlargest(10, "2016")[["AREANM", "2016"]]
         for _, row in top_10.iterrows():
-            print(f"{row['AREANM']:.<50} £{row['2016']:>7,}")
+            print(f"{row['AREANM']:.<50} GBP{row['2016']:>7,}")
 
         print("\n5. BOTTOM 10 LOWEST INCOME AREAS (2016)")
         print("-" * 80)
         bottom_10 = df.nsmallest(10, "2016")[["AREANM", "2016"]]
         for _, row in bottom_10.iterrows():
-            print(f"{row['AREANM']:.<50} £{row['2016']:>7,}")
+            print(f"{row['AREANM']:.<50} GBP{row['2016']:>7,}")
 
         print("\n6. INEQUALITY METRICS")
         print("-" * 80)
         max_income = df["2016"].max()
         min_income = df["2016"].min()
-        print(f"Highest Income Area: £{max_income:,}")
-        print(f"Lowest Income Area: £{min_income:,}")
-        print(f"Income Gap: £{max_income - min_income:,}")
+        print(f"Highest Income Area: GBP{max_income:,}")
+        print(f"Lowest Income Area: GBP{min_income:,}")
+        print(f"Income Gap: GBP{max_income - min_income:,}")
         print(f"Ratio (Max/Min): {max_income / min_income:.2f}x")
 
     return stats_2016
 
 
 def analyze_growth(df: pd.DataFrame, verbose: bool = True) -> pd.DataFrame:
-    """Analyse income growth from 1997 to 2016."""
+    """Analyze income growth from 1997 to 2016."""
 
     df_growth = df.copy()
     df_growth["Total_Growth"] = ((df["2016"] - df["1997"]) / df["1997"]) * 100
@@ -139,7 +138,7 @@ def analyze_growth(df: pd.DataFrame, verbose: bool = True) -> pd.DataFrame:
         top_growth = df_growth.nlargest(10, "Total_Growth")[["AREANM", "1997", "2016", "Total_Growth"]]
         for _, row in top_growth.iterrows():
             print(
-                f"{row['AREANM']:.<40} £{row['1997']:>6,} → £{row['2016']:>6,} "
+                f"{row['AREANM']:.<40} GBP{row['1997']:>6,} -> GBP{row['2016']:>6,} "
                 f"({row['Total_Growth']:>6.2f}%)"
             )
 
@@ -148,7 +147,7 @@ def analyze_growth(df: pd.DataFrame, verbose: bool = True) -> pd.DataFrame:
         slow_growth = df_growth.nsmallest(10, "Total_Growth")[["AREANM", "1997", "2016", "Total_Growth"]]
         for _, row in slow_growth.iterrows():
             print(
-                f"{row['AREANM']:.<40} £{row['1997']:>6,} → £{row['2016']:>6,} "
+                f"{row['AREANM']:.<40} GBP{row['1997']:>6,} -> GBP{row['2016']:>6,} "
                 f"({row['Total_Growth']:>6.2f}%)"
             )
 
@@ -157,7 +156,7 @@ def analyze_growth(df: pd.DataFrame, verbose: bool = True) -> pd.DataFrame:
         year_cols = [str(year) for year in range(1997, 2017)]
         uk_avg = df[year_cols].mean()
         for year in [1997, 2000, 2005, 2010, 2015, 2016]:
-            print(f"{year}: £{uk_avg[str(year)]:,.0f}")
+            print(f"{year}: GBP{uk_avg[str(year)]:,.0f}")
         total_growth = ((uk_avg["2016"] - uk_avg["1997"]) / uk_avg["1997"]) * 100
         print(f"\nTotal UK Average Growth: {total_growth:.2f}%")
 
@@ -169,8 +168,8 @@ def prepare_for_tableau(
     output_dir: Path | None = None,
     verbose: bool = True,
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """Prep long-format and growth metrics for Tableau, saving CSV files locally."""
-
+    """Prepare and save datasets formatted for Tableau dashboards."""
+    
     target_dir = _ensure_output_dir(output_dir)
 
     year_cols = [str(year) for year in range(1997, 2017)]
@@ -229,7 +228,7 @@ def prepare_for_tableau(
         filepath = target_dir / filename
         dataframe.to_csv(filepath, index=False)
         if verbose:
-            print(f"   ✓ Saved: {filepath}")
+            print(f"   OK Saved: {filepath}")
 
     return df_long, df_growth, df_quartiles
 
@@ -246,7 +245,7 @@ def generate_insights(df: pd.DataFrame, df_growth: pd.DataFrame, verbose: bool =
 
     top_area = df.nlargest(1, "2016")[["AREANM", "2016"]].iloc[0]
     bottom_area = df.nsmallest(1, "2016")[["AREANM", "2016"]].iloc[0]
-    print("\n📊 INSIGHT 1: EXTREME REGIONAL INEQUALITY")
+    print("\n[DATA] INSIGHT 1: EXTREME REGIONAL INEQUALITY")
     print("-" * 80)
     ratio = top_area["2016"] / bottom_area["2016"]
     print(f"The wealthiest area ({top_area['AREANM']}) has {ratio:.2f}x more disposable income "
@@ -256,10 +255,10 @@ def generate_insights(df: pd.DataFrame, df_growth: pd.DataFrame, verbose: bool =
     print("-" * 80)
     london_count = df[df["2016"] > 30000].shape[0]
     top_decile = df[df["2016"] > df["2016"].quantile(0.9)].shape[0]
-    print(f"All {london_count} areas with income above £30,000 are in London.")
+    print(f"All {london_count} areas with income above GBP30,000 are in London.")
     print(f"London regions account for {top_decile} of the top 10% highest-income areas.")
 
-    print("\n📈 INSIGHT 3: DIVERGENT GROWTH PATTERNS")
+    print("\n[GROWTH] INSIGHT 3: DIVERGENT GROWTH PATTERNS")
     print("-" * 80)
     avg_growth = df_growth["Total_Growth"].mean()
     above_avg = (df_growth["Total_Growth"] > avg_growth).sum()
@@ -284,9 +283,9 @@ def create_dashboard_figure(df: pd.DataFrame, df_growth: pd.DataFrame) -> Figure
 
     data_2016 = df["2016"]
     ax_dist.hist(data_2016, bins=25, color="#4472C4", edgecolor="black", alpha=0.7)
-    ax_dist.axvline(data_2016.mean(), color="red", linestyle="--", linewidth=2, label=f"Mean: £{data_2016.mean():,.0f}")
+    ax_dist.axvline(data_2016.mean(), color="red", linestyle="--", linewidth=2, label=f"Mean: GBP{data_2016.mean():,.0f}")
     ax_dist.set_title("GDHI Distribution (2016)", fontweight="bold")
-    ax_dist.set_xlabel("GDHI (£)", fontweight="bold")
+    ax_dist.set_xlabel("GDHI (GBP)", fontweight="bold")
     ax_dist.set_ylabel("Number of areas", fontweight="bold")
     ax_dist.legend(fontsize=9)
     ax_dist.grid(True, alpha=0.3)
@@ -294,7 +293,7 @@ def create_dashboard_figure(df: pd.DataFrame, df_growth: pd.DataFrame) -> Figure
     top_regions = df.nlargest(10, "2016")[["AREANM", "2016"]].iloc[::-1]
     ax_bar.barh(top_regions["AREANM"], top_regions["2016"], color="#2E7D32")
     ax_bar.set_title("Top 10 Regions by GDHI (2016)", fontweight="bold")
-    ax_bar.set_xlabel("GDHI (£)", fontweight="bold")
+    ax_bar.set_xlabel("GDHI (GBP)", fontweight="bold")
     ax_bar.tick_params(axis="y", labelsize=8)
 
     growth_sorted = df_growth.sort_values("Total_Growth", ascending=True).tail(15)
@@ -309,7 +308,7 @@ def create_dashboard_figure(df: pd.DataFrame, df_growth: pd.DataFrame) -> Figure
     ax_line.plot(year_cols, uk_avg, marker="o", linewidth=2, color="#1F77B4")
     ax_line.set_title("UK Average GDHI Over Time", fontweight="bold")
     ax_line.set_xlabel("Year", fontweight="bold")
-    ax_line.set_ylabel("Average GDHI (£)", fontweight="bold")
+    ax_line.set_ylabel("Average GDHI (GBP)", fontweight="bold")
     ax_line.tick_params(axis="x", rotation=45)
     ax_line.grid(True, alpha=0.3)
 
@@ -334,6 +333,8 @@ def build_widget(config: dict):
     try:
         df, actual_path = load_and_explore_data(config.get("data_path"), verbose=False)
         df_growth = analyze_growth(df, verbose=False)
+        # Generate CSV files for Tableau
+        prepare_for_tableau(df, output_dir=Path("outputs"), verbose=False)
         fig = create_dashboard_figure(df, df_growth)
 
         # Generate insights text
@@ -342,22 +343,22 @@ def build_widget(config: dict):
             f"Data source: {actual_path}\n\n"
             "KEY INSIGHTS:\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-            "📊 Regional Inequality:\n"
-            f"   • Dataset covers {len(df)} UK regions (1997-2016)\n"
-            f"   • Wealthiest area: {df.nlargest(1, '2016')['AREANM'].iloc[0]} (£{df['2016'].max():,.0f})\n"
-            f"   • Poorest area: {df.nsmallest(1, '2016')['AREANM'].iloc[0]} (£{df['2016'].min():,.0f})\n"
-            f"   • Income ratio: {df['2016'].max() / df['2016'].min():.2f}x difference\n\n"
-            "📈 Growth Analysis:\n"
-            f"   • Average growth 1997-2016: {df_growth['Total_Growth'].mean():.1f}%\n"
-            f"   • Fastest growing: {df_growth.nlargest(1, 'Total_Growth')['AREANM'].iloc[0]} "
+            "[DATA] Regional Inequality:\n"
+            f"   - Dataset covers {len(df)} UK regions (1997-2016)\n"
+            f"   - Wealthiest area: {df.nlargest(1, '2016')['AREANM'].iloc[0]} (GBP{df['2016'].max():,.0f})\n"
+            f"   - Poorest area: {df.nsmallest(1, '2016')['AREANM'].iloc[0]} (GBP{df['2016'].min():,.0f})\n"
+            f"   - Income ratio: {df['2016'].max() / df['2016'].min():.2f}x difference\n\n"
+            "[GROWTH] Growth Analysis:\n"
+            f"   - Average growth 1997-2016: {df_growth['Total_Growth'].mean():.1f}%\n"
+            f"   - Fastest growing: {df_growth.nlargest(1, 'Total_Growth')['AREANM'].iloc[0]} "
             f"({df_growth['Total_Growth'].max():.1f}%)\n"
-            f"   • Slowest growing: {df_growth.nsmallest(1, 'Total_Growth')['AREANM'].iloc[0]} "
+            f"   - Slowest growing: {df_growth.nsmallest(1, 'Total_Growth')['AREANM'].iloc[0]} "
             f"({df_growth['Total_Growth'].min():.1f}%)\n\n"
-            "💡 Dashboard Visualizations:\n"
-            "   • Income distribution (2016)\n"
-            "   • Top 10 regions by income\n"
-            "   • Regional growth comparison\n"
-            "   • UK average income trend over time"
+            "[INFO] Dashboard Visualizations:\n"
+            "   - Income distribution (2016)\n"
+            "   - Top 10 regions by income\n"
+            "   - Regional growth comparison\n"
+            "   - UK average income trend over time"
         )
 
         # Return standard format: dict with figures and text
