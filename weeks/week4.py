@@ -245,16 +245,24 @@ def create_visualizations(df: pd.DataFrame, df_prep: pd.DataFrame) -> Figure:
     ax6.legend()
     ax6.grid(True, alpha=0.3)
 
-    # 7. Missing values heatmap
+    # 7. Correlation heatmap
     ax7 = fig.add_subplot(gs[2, 1])
-    missing_data = df.isnull().astype(int)
-    if missing_data.sum().sum() > 0:
-        sns.heatmap(missing_data.T, cmap='YlOrRd', cbar=True, ax=ax7, yticklabels=True)
-        ax7.set_title('Missing Values Heatmap', fontweight='bold', fontsize=11)
+    # Select sample years for correlation analysis
+    correlation_years = ['1997', '2000', '2004', '2008', '2012', '2016']
+    available_years = [year for year in correlation_years if year in df.columns]
+
+    if len(available_years) >= 2:
+        correlation_matrix = df[available_years].corr()
+        sns.heatmap(correlation_matrix, annot=True, fmt='.3f', cmap='coolwarm',
+                   center=0, ax=ax7, cbar_kws={'label': 'Correlation'},
+                   square=True, linewidths=0.5)
+        ax7.set_title('Correlation Heatmap: GDHI by Year', fontweight='bold', fontsize=11)
+        ax7.set_xticklabels(ax7.get_xticklabels(), rotation=45, ha='right')
+        ax7.set_yticklabels(ax7.get_yticklabels(), rotation=0)
     else:
-        ax7.text(0.5, 0.5, 'No Missing Values Detected',
+        ax7.text(0.5, 0.5, 'Insufficient data for correlation',
                 ha='center', va='center', fontsize=12, fontweight='bold')
-        ax7.set_title('Missing Values Heatmap', fontweight='bold', fontsize=11)
+        ax7.set_title('Correlation Heatmap: GDHI by Year', fontweight='bold', fontsize=11)
         ax7.axis('off')
 
     # 8. Summary statistics table

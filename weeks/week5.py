@@ -99,7 +99,8 @@ def descriptive_statistics(df: pd.DataFrame, verbose: bool = True) -> None:
         std_val = df[year].std()
         print(f"{year}:")
         print(f"  Range:        GBP {float(df[year].max() - df[year].min()):.2f}")
-        print(f"  Variance:     GBP {float(df[year].var()):.2f}")
+        variance_val: float = float(df[year].var())  # type: ignore[arg-type]
+        print(f"  Variance:     GBP {variance_val:.2f}")
         print(f"  Std Dev:      GBP {float(std_val):.2f}")
         print(f"  IQR:          GBP {float(df[year].quantile(0.75) - df[year].quantile(0.25)):.2f}")
         print(f"  Coef. Var.:   {std_val / mean_val * 100:.2f}%")
@@ -108,8 +109,8 @@ def descriptive_statistics(df: pd.DataFrame, verbose: bool = True) -> None:
     print("-" * 80)
     for year in REFERENCE_YEARS:
         col = df[year].astype(float)
-        skew = float(col.skew())
-        kurtosis = float(col.kurtosis())
+        skew: float = float(col.skew())  # type: ignore[arg-type]
+        kurtosis: float = float(col.kurtosis())  # type: ignore[arg-type]
         if skew > 0:
             skew_txt = "Positively skewed (right tail)"
         elif skew < 0:
@@ -251,7 +252,7 @@ def create_visualisations(df: pd.DataFrame, verbose: bool = True) -> tuple[Figur
     fig2 = plt.figure(figsize=(16, 10))
 
     ax7 = plt.subplot(2, 2, 1)
-    skew_values = np.array([float(data[year].astype(float).skew()) for year in years], dtype=float)
+    skew_values = np.array([float(data[year].astype(float).skew()) for year in years], dtype=float)  # type: ignore[arg-type]
     ax7.plot(years_numeric, skew_values, marker="o", color="purple", linewidth=2)
     ax7.axhline(y=0, color="black", linestyle="--", alpha=0.3)
     ax7.set_title("Skewness over time", fontweight="bold")
