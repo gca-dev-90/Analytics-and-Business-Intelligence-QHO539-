@@ -2,7 +2,7 @@
 
 A PyQt6-based GUI application for running and visualizing Python analytics code from Weeks 1-10. This project provides a clean interface to execute weekly exercises and view results with data analysis, machine learning, and visualization capabilities.
 
-## Prerequisites
+## Requirements
 
 - Python 3.10 or higher
 - Git (for cloning the repository)
